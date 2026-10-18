@@ -18,14 +18,13 @@
     </script>
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased overflow-x-hidden">
-    <nav class="absolute w-full z-40 top-0 bg-gradient-to-b from-black/80 to-transparent">
-        <div class="container mx-auto px-6 py-6 flex justify-between items-center text-white">
-            <div class="hidden md:flex space-x-10 text-[12px] tracking-[0.25em] font-light uppercase">
-                <a href="#rooms-section" class="hover:text-gold transition">Lưu Trú</a>
+    <nav aria-label="Điều hướng chính" class="sticky w-full z-40 top-0 bg-dark">
+        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4 text-white">
+            <a href="#home" aria-label="SSA Hotel - Trang chủ" class="text-2xl font-serif tracking-[0.2em] text-gold font-medium">SSA HOTEL</a>
+            <div class="flex items-center gap-4 text-xs tracking-widest uppercase">
+                <a id="nav-home" href="#home" class="hover:text-gold transition">Trang chủ</a>
+                <a id="nav-booking" href="#booking" class="border border-gold px-4 py-3 hover:bg-gold hover:text-white transition">Đặt phòng</a>
             </div>
-            <h1 class="text-3xl font-serif tracking-[0.2em] absolute left-1/2 -translate-x-1/2 cursor-pointer text-gold font-medium">
-                SSA HOTEL
-            </h1>
             <div class="text-[11px] tracking-[0.2em] uppercase font-bold flex gap-6 items-center">
                 <div id="menu-guest" class="flex items-center gap-3">
                     <button onclick="moModal('register-modal')" class="bg-gold border border-gold px-5 py-2 text-white hover:bg-white hover:text-dark hover:border-white transition duration-300">
@@ -44,22 +43,25 @@
             </div>
         </div>
     </nav>
-    <header class="relative h-[90vh] bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1542314831-c6a4d1424391?auto=format&fit=crop&w=2000&q=80');">
+    <header id="home-section" class="relative min-h-[75vh] py-16 bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1542314831-c6a4d1424391?auto=format&fit=crop&w=2000&q=80');">
         <div class="absolute inset-0 bg-black/60"></div>
         <div class="relative z-10 text-center text-white px-4 mt-20">
             <p class="uppercase tracking-[0.3em] text-xs mb-6 text-gold drop-shadow-md font-semibold">Chào Mừng Đến Với</p>
-            <h2 class="text-5xl md:text-7xl font-serif mb-6 leading-tight drop-shadow-2xl">
+            <h1 id="home-title" tabindex="-1" class="text-5xl md:text-7xl font-serif mb-6 leading-tight drop-shadow-2xl">
                 Tuyệt Tác Không Gian<br>Giữa Lòng Sài Gòn
-            </h2>
+            </h1>
             <p class="max-w-2xl mx-auto font-light text-sm md:text-base opacity-90 leading-relaxed">
                 Trải nghiệm kỳ nghỉ xa hoa và dịch vụ cá nhân hóa đẳng cấp quốc tế tại SSA Hotel.
             </p>
+            <a href="#booking" class="inline-block mt-8 bg-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-white hover:text-dark hover:border-white transition">Đặt phòng ngay</a>
         </div>
     </header>
-    <main id="rooms-section" class="container mx-auto px-6 py-24 max-w-7xl">
-        <div class="text-center mb-16">
-            <h3 class="text-4xl font-serif text-dark font-medium mb-4">Phòng & Suite Sang Trọng</h3>
-            <p class="text-gray-500 font-light text-sm tracking-wide">Trang bị vòi sen tắm đứng, máy sấy Dyson và công nghệ nhà thông minh.</p>
+    <main id="rooms-section" class="hidden container mx-auto px-6 py-10 max-w-7xl min-h-[75vh]">
+        <a href="#home" class="inline-block mb-6 text-sm text-gray-500 hover:text-gold">&larr; Về trang chủ</a>
+        <div class="text-center mb-8">
+            <p class="text-xs uppercase tracking-widest text-gold font-bold mb-3">Đặt phòng tại SSA Hotel</p>
+            <h2 id="booking-title" tabindex="-1" class="text-4xl font-serif text-dark font-medium mb-4">Chọn hạng phòng của bạn</h2>
+            <p class="text-gray-500 font-light text-sm tracking-wide">Chọn hạng phòng yêu thích, sau đó chọn ngày lưu trú và xác nhận đặt phòng.</p>
         </div>
         
         <div id="room-list-container" class="grid grid-cols-1 md:grid-cols-3 gap-12">

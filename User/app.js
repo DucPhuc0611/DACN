@@ -217,6 +217,33 @@ function timNhieuPhongTrong(maLoaiPhong, checkIn, checkOut, count) {
 // ==========================================
 // 3. GIAO DIEN & TAI KHOAN
 // ==========================================
+let loaiPhongChoDangNhap = null;
+
+function hienThiTrangKhachHang(chuyenFocus = false) {
+    const dangDatPhong = ['#booking', '#rooms-section'].includes(window.location.hash);
+    document.getElementById('home-section').classList.toggle('hidden', dangDatPhong);
+    document.getElementById('rooms-section').classList.toggle('hidden', !dangDatPhong);
+    ['nav-home', 'nav-booking'].forEach(id => {
+        const active = (id === 'nav-booking') === dangDatPhong;
+        const link = document.getElementById(id);
+        link.classList.toggle('text-gold', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+    });
+    if (dangDatPhong) renderRooms();
+    if (chuyenFocus) {
+        document.getElementById(dangDatPhong ? 'booking-title' : 'home-title').focus({ preventScroll: true });
+        window.scrollTo(0, 0);
+    }
+}
+
+function tiepTucDatPhongSauDangNhap() {
+    if (!loaiPhongChoDangNhap) return;
+    const maLoaiPhong = loaiPhongChoDangNhap;
+    loaiPhongChoDangNhap = null;
+    chuanBiDatPhong(maLoaiPhong);
+}
+
 function renderRooms() {
     const container = document.getElementById('room-list-container');
     if (!container) return;
@@ -229,7 +256,7 @@ function renderRooms() {
         return `
         <div class="group cursor-pointer">
             <div class="overflow-hidden relative shadow-sm">
-                <img onclick="openRoomModal('${roomType.MaLoaiPhong}')" src="${roomType.img}" alt="${roomType.TenLoai}" loading="lazy" class="w-full h-[450px] object-cover transition duration-1000 group-hover:scale-105 cursor-pointer">
+                <img onclick="openRoomModal('${roomType.MaLoaiPhong}')" src="${roomType.img}" alt="${roomType.TenLoai}" loading="lazy" class="w-full h-52 lg:h-64 object-cover transition duration-1000 group-hover:scale-105 cursor-pointer">
             </div>
             <div class="pt-6 text-center">
                 <h4 class="text-2xl font-serif text-dark mb-2">${roomType.TenLoai}</h4>
@@ -307,6 +334,7 @@ function xuLyDangNhap(e) {
     dongModal('login-modal');
     checkLoginStatus();
     taiDuLieuProfile();
+    tiepTucDatPhongSauDangNhap();
 }
 
 function taoMaKhachHangMoi(users) {
@@ -377,9 +405,11 @@ function xuLyDangKy(e) {
     taiDuLieuProfile();
 
     alert(`Đăng ký thành công! Chào mừng ${name} đến với SSA Hotel.`);
+    tiepTucDatPhongSauDangNhap();
 }
 
 function xuLyDangXuat() {
+    loaiPhongChoDangNhap = null;
     localStorage.removeItem('CurrentUser');
     checkLoginStatus();
     taiDuLieuProfile();
@@ -434,6 +464,7 @@ function taiDuLieuProfile() {
 function chuanBiDatPhong(maLoaiPhong) {
     const user = docDuLieu('CurrentUser', null);
     if (!user) {
+        loaiPhongChoDangNhap = maLoaiPhong;
         alert('Vui lòng đăng nhập để đặt phòng!');
         moModal('login-modal');
         return;
@@ -710,4 +741,7 @@ window.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus();
     taiDuLieuProfile();
     ganSuKienForm();
+    hienThiTrangKhachHang();
 });
+
+window.addEventListener('hashchange', () => hienThiTrangKhachHang(true));
