@@ -200,7 +200,7 @@
                             <input type="number" id="bk-guests" min="1" max="6" value="2" required class="w-full border-b border-gray-300 py-2 bg-transparent outline-none focus:border-gold">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-500 mb-1">Tiền cọc ($) *</label>
+                            <label class="block text-xs text-gray-500 mb-1">Cọc dự kiến ($), chưa thu</label>
                             <input type="number" id="bk-deposit" value="100" readonly class="w-full border-b border-gray-300 py-2 bg-transparent outline-none text-gray-500">
                         </div>
                     </div>
@@ -215,6 +215,8 @@
                         </div>
                     </div>
                     <div>
+                        <label class="block text-xs text-gray-500 mb-1" for="bk-promo">Mã khuyến mãi (nếu có)</label>
+                        <input id="bk-promo" maxlength="30" class="w-full border border-gray-200 p-3 rounded-md bg-white text-sm mb-4" placeholder="Mã đã được khách sạn phê duyệt">
                         <label class="block text-xs text-gray-500 mb-1">Ghi chú (tùy chọn)</label>
                         <textarea id="bk-note" rows="3" class="w-full border border-gray-200 p-3 rounded-md bg-white text-sm" placeholder="Ghi chú của khách: yêu cầu đặc biệt, giờ đến, ..."></textarea>
                     </div>
@@ -282,6 +284,9 @@
         <p class="opacity-50">© 2026 Đồ Án Cơ Sở - Khoa CNTT. All rights reserved.</p>
     </footer>
 
+    <link rel="stylesheet" href="../Admin/workflows.css">
+    <script src="../shared/pms.js"></script>
     <script src="app.js"></script>
+    <script src="workflows.js"></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+// Run after npm start. Set PLAYWRIGHT_MODULE to an installed Playwright package path if necessary.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+(async()=>{
+    const browser=await chromium.launch({channel:'msedge',headless:true});
+    try{
+        const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];
+        page.on('pageerror',e=>errors.push(e.message));
+        page.on('dialog',d=>d.accept());
+        await page.goto('http://127.0.0.1:4173/Admin/admin.html',{waitUntil:'networkidle'});
+        await page.locator('#login-user').fill('admin');await page.locator('#login-pass').fill('123');await page.locator('#login-form button').click();
+        await page.locator('#btn-operations').click();
+        const tab=async name=>page.locator(`[data-group="${name}"]`).click();
+        const action=async name=>page.locator(`#tab-operations [data-action="${name}"]`).first().click();
+        const form=async(values={})=>{for(const [k,v] of Object.entries(values)){const input=page.locator(`#pms-dialog [name="${k}"]`);if(typeof v==='boolean')await input.setChecked(v);else if(await input.evaluate(el=>el.tagName)==='SELECT')await input.selectOption(v);else await input.fill(String(v));}await page.locator('#pms-dialog button[type=submit]').click();await page.waitForFunction(()=>!document.getElementById('pms-dialog').open);};
+        await action('reserve');await form({count:1,guests:1,deposit:50,note:'Khách cần phòng yên tĩnh'});
+        let bookings=await page.evaluate(()=>JSON.parse(localStorage.PhieuDatPhong));assert.equal(bookings.length,1);const bid=bookings[0].MaPDP;
+        await action('checkin');await form({identity:'TEST-IDENTITY',nationality:'Việt Nam',key:'CARD-101'});
+        await action('residence');await form({ref:'TEMP-001'});
+        await tab('service');await action('service');await form({item:'BREAKFAST',quantity:2,customer:'Hoàng Gia Đức Phúc',confirmed:true});
+        await tab('stay');await action('move');await form({room:'P201',key:'CARD-201',reason:'Nâng hạng có thu phí'});
+        await action('adjust');await form({amount:-10,reason:'Giảm trừ bồi thường được duyệt'});
+        await action('invoice');assert.match(await page.locator('#pms-dialog').innerText(),/300\.00/);await page.locator('#pms-close').click();
+        await tab('rooms');await page.locator('[data-action=clean][data-id=P101]').click();await form({confirmed:true});await page.locator('[data-action=inspect][data-id=P101]').click();await form({passed:true,note:'Vệ sinh và vật dụng đạt yêu cầu'});
+        await action('incident-new');await form({room:'P102',note:'Máy lạnh không hoạt động'});
+        for(let i=0;i<5;i++){await action('incident');await form({note:'Đã thực hiện bước '+i});}
+        await tab('audit');await action('audit');await form({confirmed:true});
+        await tab('checkout');await action('room-check');await form({note:'Không có minibar bổ sung'});
+        await action('checkout');await form({amount:250,method:'Thẻ',ref:'AUTH-DEMO-001',confirmed:true});
+        bookings=await page.evaluate(()=>JSON.parse(localStorage.PhieuDatPhong));assert.equal(bookings[0].TrangThai,'Đã trả phòng');
+        const extra=await page.evaluate(()=>JSON.parse(localStorage.SSA_Workflows_v1));assert.equal(extra.invoices.length,1);assert.equal(extra.reports.length,1);assert.equal(extra.invoices[0].total,300);
+        fs.mkdirSync('test-results',{recursive:true});await page.screenshot({path:'test-results/pms-checkout.png',fullPage:true});
+        await tab('audit');await page.screenshot({path:'test-results/pms-audit.png',fullPage:true});
+        const guest=await context.newPage();guest.on('pageerror',e=>errors.push(e.message));guest.on('dialog',d=>d.accept());
+        await guest.goto('http://127.0.0.1:4173/User/index.html',{waitUntil:'networkidle'});
+        await guest.locator('[onclick="moModal(\'login-modal\')"]').click();await guest.locator('#login-username').fill('phuc');await guest.locator('#login-password').fill('123');await guest.locator('#login-form button[type=submit]').click();
+        await guest.locator('[onclick="moModal(\'profile-modal\')"]').click();
+        assert.match(await guest.locator('#history-list').innerText(),/Đã trả phòng/);assert.match(await guest.locator('#history-list').innerText(),/Ăn sáng/);
+        await guest.screenshot({path:'test-results/guest-history.png',fullPage:true});
+        await tab('audit');await action('promotion');await form({code:'WELCOME',percent:10});await action('approve-promotion');await form({confirmed:true});
+        await tab('rooms');await action('supply');await form({name:'Khăn tắm',par:2,unit:'cái',cost:3});assert.match(await page.locator('#tab-operations').innerText(),/Khăn tắm/);
+        await tab('service');await page.locator('[data-action=menu][data-id=BREAKFAST]').click();await form({cost:5});
+        await guest.locator('#profile-modal>div>button').click();await guest.goto('http://127.0.0.1:4173/User/index.html#booking',{waitUntil:'networkidle'});
+        await guest.locator('#room-list-container button').first().click();await guest.locator('#bk-note').fill('<img src=x onerror=alert(1)>');await guest.locator('#bk-promo').fill('WELCOME');assert.match(await guest.locator('#summary-total').innerText(),/135/);await guest.locator('#booking-form button[type=submit]').click();await guest.waitForFunction(()=>document.getElementById('booking-modal').classList.contains('hidden'));
+        const guestBooking=await guest.evaluate(()=>JSON.parse(localStorage.PhieuDatPhong).at(-1));assert.equal(guestBooking.TongTienDuKien,135);assert.equal(guestBooking.TienCoc,0);
+        await guest.locator('[onclick="moModal(\'profile-modal\')"]').click();await guest.locator('[data-guest-request]').first().click();await guest.locator('#guest-request-dialog textarea').fill('Xin đổi giờ nhận phòng');await guest.locator('#guest-request-dialog button[type=submit]').click();await guest.waitForFunction(()=>!document.getElementById('guest-request-dialog').open);
+        assert.equal(await guest.locator('#history-list img').count(),0);assert.match(await guest.locator('#history-list').innerText(),/Xin đổi giờ nhận phòng/);
+        await tab('booking');await action('request');await form({response:'Đã tiếp nhận, lễ tân sẽ hỗ trợ.'});await guest.waitForFunction(()=>document.getElementById('history-list').innerText.includes('lễ tân sẽ hỗ trợ'));
+        await tab('audit');
+        await page.setViewportSize({width:800,height:900});await page.screenshot({path:'test-results/pms-tablet.png',fullPage:true});
+        assert.deepEqual(errors,[]);console.log('PASS browser: booking, check-in, services, move, adjustment, housekeeping, repair, night audit, checkout, shared guest history.');
+        console.log('Booking:',bid,'; invoice total:',extra.invoices[0].total,'; logs:',extra.logs.length);
+        await context.close();
+    }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});
