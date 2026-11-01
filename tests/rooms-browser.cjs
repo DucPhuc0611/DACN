@@ -1,0 +1,57 @@
+// Run with npm start in another terminal; uses the same Playwright setup as browser.cjs.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+(async()=>{
+  const browser=await chromium.launch({channel:'msedge',headless:true});
+  try {
+    const context=await browser.newContext({viewport:{width:1440,height:1000}});
+    const page=await context.newPage(),errors=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.goto('http://127.0.0.1:4173/Admin/admin.html',{waitUntil:'networkidle'});
+    await page.locator('#login-user').fill('admin');
+    await page.locator('#login-pass').fill('123');
+    await page.locator('#login-form button').click();
+    await page.locator('#btn-rooms').click();
+    const total=await page.locator('[data-room-open]').count();
+    assert.equal(total,21);
+    assert.equal(await page.locator('.room-floor-section').count(),5);
+    assert.doesNotMatch(await page.locator('#tab-rooms').innerText(),/[✨🌟⭐]/u);
+    fs.mkdirSync('test-results',{recursive:true});
+    await page.screenshot({path:'test-results/rooms-desktop.png',fullPage:true});
+    await page.locator('#room-floor').selectOption('2');
+    assert.equal(await page.locator('[data-room-open]').count(),6);
+    await page.locator('#room-search').fill('khong tim thay');
+    assert.equal(await page.locator('[data-room-open]').count(),0);
+    await page.locator('[data-room-reset]').click();
+    assert.equal(await page.locator('[data-room-open]').count(),total);
+    await page.locator('#room-search').fill('tieu chuan');
+    assert.ok(await page.locator('[data-room-open]').count()>0);
+    assert.ok(await page.locator('[data-room-open]').count()<total);
+    await page.locator('#room-search').fill('');
+    await page.locator('[data-room-status=dirty]').click();
+    const dirtyCount=await page.locator('[data-room-open]').count();
+    assert.ok(dirtyCount>0);
+    const dirtyId=await page.locator('[data-room-open]').first().getAttribute('data-room-open');
+    await page.locator('[data-room-open]').first().click();
+    await page.locator('#pms-dialog [data-action=clean]').click();
+    await page.locator('#pms-dialog [name=confirmed]').check();
+    await page.locator('#pms-dialog button[type=submit]').click();
+    await page.waitForFunction(()=>!document.getElementById('pms-dialog').open);
+    assert.equal(await page.locator('[data-room-open]').count(),dirtyCount-1);
+    await page.locator('[data-room-status=inspection]').click();
+    await page.locator(`[data-room-open="${dirtyId}"]`).click();
+    assert.equal(await page.locator('#pms-dialog [data-action=inspect]').count(),1);
+    await page.locator('.room-detail-close').click();
+    await page.locator('[data-room-status=all]').click();
+    await page.locator('[data-room-open=P202]').click();
+    await page.screenshot({path:'test-results/rooms-detail.png'});
+    await page.keyboard.press('Escape');
+    await page.setViewportSize({width:390,height:844});
+    await page.screenshot({path:'test-results/rooms-mobile.png',fullPage:true});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    assert.ok(await page.locator('.room-board').evaluate(el=>el.scrollWidth<=el.clientWidth));
+    assert.deepEqual(errors,[]);
+    console.log('PASS rooms: floor/status/search filters, empty reset, room details, housekeeping action, mobile layout.');
+  } finally {await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -162,13 +162,6 @@ function formatNgayGio(value) {
     return new Date(value).toLocaleString('vi-VN');
 }
 
-function mauTrangThaiPhong(status) {
-    if (status === ROOM_READY) return { card: 'bg-green-50 border-green-400 text-green-700', icon: '✨' };
-    if (status === ROOM_USING) return { card: 'bg-red-50 border-red-400 text-red-700', icon: '🛌' };
-    if (status === ROOM_DIRTY) return { card: 'bg-yellow-50 border-yellow-400 text-yellow-700', icon: '🧹' };
-    return { card: 'bg-white border-gray-300 text-gray-700', icon: '🚪' };
-}
-
 function mauBadge(status) {
     const map = {
         [BOOKING_PENDING]: 'bg-blue-100 text-blue-700',
@@ -285,11 +278,7 @@ function capNhatHeaderActions(tabName) {
     if (!headerActions) return;
 
     if (tabName === 'rooms') {
-        headerActions.innerHTML = `
-            <span class="px-2 py-1 bg-green-100 text-green-700 rounded border border-green-200">🟢 Sẵn Sàng</span>
-            <span class="px-2 py-1 bg-red-100 text-red-700 rounded border border-red-200">🔴 Đang Dùng</span>
-            <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded border border-yellow-200">🟡 Chưa Dọn</span>
-        `;
+        headerActions.innerHTML = '<span class="room-header-note">Bảng vận hành phòng</span><button type="button" onclick="lamMoiTabHienTai()" class="room-refresh">Làm mới</button>';
         return;
     }
 
@@ -400,40 +389,7 @@ function veDashboardIncidents() {
 // SO DO PHONG
 // ============================================================
 function veSoDoPhong() {
-    const rooms = docDuLieu('Phong');
-    const customers = docDuLieu('KhachHang');
-    const bookings = docDuLieu('PhieuDatPhong');
-
-    if (rooms.length === 0) {
-        document.getElementById('tab-rooms').innerHTML = '<p class="text-red-500">Chưa có dữ liệu phòng.</p>';
-        return;
-    }
-
-    document.getElementById('tab-rooms').innerHTML = rooms.map(room => {
-        const roomType = timLoaiPhong(room.MaLoaiPhong);
-        const style = mauTrangThaiPhong(room.TrangThaiVeSinh);
-        const activeBooking = bookings.find(booking => booking.MaPhong === room.MaPhong && booking.TrangThai === BOOKING_CHECKED_IN);
-        const customer = activeBooking ? customers.find(item => item.MaKH === activeBooking.MaKH) : null;
-        let actionButton = '';
-
-        if (room.TrangThaiVeSinh === ROOM_USING && coQuyenLeTan()) {
-            actionButton = `<button onclick="checkOut('${room.MaPhong}')" class="mt-3 w-full bg-red-600 text-white text-xs font-bold py-2 rounded hover:bg-red-700 shadow">Thu tiền & Check-out</button>`;
-        } else if (room.TrangThaiVeSinh === ROOM_DIRTY && currentStaff && ['buongphong', 'admin'].includes(currentStaff.ChucDanh)) {
-            actionButton = `<button onclick="donXong('${room.MaPhong}')" class="mt-3 w-full bg-green-500 text-white text-xs font-bold py-2 rounded hover:bg-green-600 shadow">Báo Đã Dọn Sạch</button>`;
-        }
-
-        return `
-        <div class="p-5 rounded-lg border-2 shadow-sm ${style.card}">
-            <div class="flex justify-between items-start mb-2">
-                <h3 class="text-3xl font-black">${escapeHTML(room.MaPhong)}</h3>
-                <span class="text-2xl">${style.icon}</span>
-            </div>
-            <p class="text-[10px] font-bold px-2 py-1 bg-white/60 rounded inline-block shadow-sm">${escapeHTML(room.TrangThaiVeSinh)}</p>
-            <p class="text-xs mt-3 text-gray-500">${escapeHTML(roomType?.TenLoai || 'Hạng phòng SSA')}</p>
-            ${customer ? `<p class="text-xs mt-3 truncate text-blue-800 font-bold border-t pt-2 border-black/10">👤 ${escapeHTML(customer.HoTen)}</p>` : ''}
-            ${actionButton}
-        </div>`;
-    }).join('');
+    renderRoomBoard();
 }
 
 // ============================================================

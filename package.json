@@ -6,6 +6,6 @@
   "scripts": {
     "start": "node scripts/serve.cjs",
     "test": "node --test tests/pms.test.js",
-    "check": "node --check shared/pms.js && node --check Admin/workflows.js && node --check User/workflows.js"
+    "check": "node --check shared/pms.js && node --check Admin/admin.js && node --check Admin/rooms.js && node --check Admin/workflows.js && node --check User/workflows.js"
   }
 }
