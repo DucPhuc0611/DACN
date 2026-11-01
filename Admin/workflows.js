@@ -32,7 +32,7 @@ chuyenTab=function(tab){
     if(tab!=='operations'){originalSwitchTab(tab);return;}
     if(!currentStaff)return;
     ['dashboard','rooms','bookings','technical','customers'].forEach(k=>{document.getElementById('tab-'+k)?.classList.add('hidden');document.getElementById('btn-'+k)?.classList.remove('bg-gray-700','text-white');});
-    activeTab='operations';document.getElementById('tab-operations').classList.remove('hidden');document.getElementById('btn-operations').classList.add('bg-gray-700','text-white');document.getElementById('page-title').textContent='Nghiệp vụ khách sạn';capNhatHeaderActions('operations');renderOperations();
+    activeTab='operations';document.getElementById('tab-operations').classList.remove('hidden');document.getElementById('btn-operations').classList.add('bg-gray-700','text-white');document.getElementById('page-title').textContent='Các nghiệp vụ khác';capNhatHeaderActions('operations');renderOperations();
 };
 function renderOperations(){
     const d=pms.load(),date=d.extra.businessDate;
@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     try{pms.recover();}catch(e){alert(e.message);return;}
     const roles=[['truongca','Trưởng tiền sảnh','Tiền sảnh'],['giamsattang','Giám sát tầng','Buồng phòng'],['phucvu','Nhân viên phục vụ','Dịch vụ'],['thungan','Thu ngân dịch vụ','Dịch vụ'],['kiemtoan','Kiểm toán đêm','Kế toán'],['hanhly','Nhân viên hành lý','Tiền sảnh']];
     const staff=docDuLieu('NhanVien');roles.forEach(([role,name,dept])=>{if(!staff.some(s=>s.ChucDanh===role))staff.push({MaNV:'NV_'+role,HoTen:name,PhongBan:dept,ChucDanh:role,pass:'123'});});luuDuLieu('NhanVien',staff);
-    document.getElementById('sidebar-menu').insertAdjacentHTML('beforeend','<button id="btn-operations" class="role-all w-full text-left p-3 rounded sidebar-btn text-white" onclick="chuyenTab(\'operations\')">Nghiệp vụ theo UC</button>');
+    document.getElementById('sidebar-menu').insertAdjacentHTML('beforeend','<button id="btn-operations" class="role-all w-full text-left p-3 rounded sidebar-btn text-white" onclick="chuyenTab(\'operations\')">Các nghiệp vụ khác</button>');
     document.getElementById('tab-customers').insertAdjacentHTML('afterend','<div id="tab-operations" class="hidden"></div>');
     document.body.insertAdjacentHTML('beforeend','<dialog id="pms-dialog" class="pms-modal"></dialog>');
     document.querySelector('#login-screen ul').insertAdjacentHTML('beforeend',roles.map(([r,n])=>`<li>${n}: <b>${r}</b></li>`).join(''));
