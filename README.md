@@ -16,7 +16,9 @@ Mở cả hai trang trên cùng địa chỉ máy chủ và cùng hồ sơ trìn
 
 ## Giao diện
 
-Trang khách tại `User/index.html` có phần giới thiệu, bộ sưu tập hạng phòng lấy từ `LoaiPhong` và nút đi thẳng vào luồng đặt phòng. PMS tại `Admin/admin.html` dùng cùng tông xanh trầm, kem và đồng, có thanh điều hướng cuộn ngang trên điện thoại. CSS giao diện nằm ở `User/luxury.css` và `Admin/luxury.css`; ảnh mở đầu có sẵn trong `User/assets/hotel-hero.webp`. Phần giao diện này chỉ thay cách trình bày, không biến các khả năng mô phỏng thành dịch vụ khách sạn thực tế.
+Trang khách tại `User/index.html` có phần giới thiệu, bộ sưu tập hạng phòng và bộ lọc ngày/số phòng/số khách lấy từ dữ liệu `LoaiPhong`, `Phong` và `PhieuDatPhong`. Nút “Phòng & suite” cuộn đến danh sách hạng phòng trên cùng trang, nên khách vẫn có thể cuộn lên xem lại nội dung. Biểu mẫu đăng ký lưu trú hiển thị ảnh, mô tả và tiện nghi của hạng phòng đã chọn. PMS tại `Admin/admin.html` dùng cùng tông xanh trầm, kem và đồng, có thanh điều hướng cuộn ngang trên điện thoại. CSS giao diện nằm ở `User/luxury.css` và `Admin/luxury.css`; ảnh mở đầu có sẵn trong `User/assets/hotel-hero.webp`.
+
+Bản đồ Google Maps đang trỏ đến **khu vực tham khảo trung tâm Quận 1**, vì địa chỉ khách sạn chưa được chốt. Phần sự kiện liên kết đến lịch TP.HCM trên Eventbrite và Ticketbox; không tự khẳng định khoảng cách hay sự kiện do SSA Hotel tổ chức. Số điện thoại `19077777` do người dùng cung cấp; `ssa.hotel.com` và Facebook/TikTok/Zalo được hiển thị là đang thiết lập/cập nhật, chưa có liên kết chính thức. Các phần này chỉ bổ sung cách trình bày và tra cứu, không biến mô phỏng thành dịch vụ khách sạn thực tế.
 
 ## Tài khoản trình diễn
 

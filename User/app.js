@@ -218,25 +218,18 @@ function timNhieuPhongTrong(maLoaiPhong, checkIn, checkOut, count) {
 // 3. GIAO DIEN & TAI KHOAN
 // ==========================================
 let loaiPhongChoDangNhap = null;
+let boLocHangPhong = 'all';
 
-function hienThiTrangKhachHang(chuyenFocus = false) {
-    const dangDatPhong = ['#booking', '#rooms-section'].includes(window.location.hash);
-    document.getElementById('home-section').classList.toggle('hidden', dangDatPhong);
-    document.getElementById('home-content').classList.toggle('hidden', dangDatPhong);
-    document.getElementById('rooms-section').classList.toggle('hidden', !dangDatPhong);
+function hienThiTrangKhachHang() {
+    const bookingTop = document.getElementById('booking').getBoundingClientRect().top;
+    const navHeight = document.querySelector('.site-nav').offsetHeight;
+    const dangDatPhong = bookingTop <= navHeight + 30;
     ['nav-home', 'nav-booking'].forEach(id => {
         const active = (id === 'nav-booking') === dangDatPhong;
         const link = document.getElementById(id);
-        link.classList.toggle('text-gold', active);
         if (active) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
     });
-    if (dangDatPhong) renderRooms();
-    else renderHomeRooms();
-    if (chuyenFocus) {
-        document.getElementById(dangDatPhong ? 'booking-title' : 'home-title').focus({ preventScroll: true });
-        window.scrollTo(0, 0);
-    }
 }
 
 function renderHomeRooms() {
@@ -267,11 +260,10 @@ function renderHomeRooms() {
         button.type = 'button';
         button.className = 'text-link';
         const available = demPhongSanSang(roomType.MaLoaiPhong) > 0;
-        button.disabled = !available;
-        button.textContent = available ? 'Xem & đặt phòng ↗' : 'Tạm hết phòng';
+        button.textContent = available ? 'Xem hạng phòng ↗' : 'Xem các lựa chọn khác ↗';
         button.addEventListener('click', () => {
             window.location.hash = 'booking';
-            chuanBiDatPhong(roomType.MaLoaiPhong);
+            document.getElementById('booking')?.scrollIntoView();
         });
         copy.append(label, title, detail, button);
         card.append(copy);
@@ -286,31 +278,110 @@ function tiepTucDatPhongSauDangNhap() {
     chuanBiDatPhong(maLoaiPhong);
 }
 
+function ngayKeTiep(value) {
+    if (!value) return '';
+    const date = parseNgay(value);
+    date.setDate(date.getDate() + 1);
+    return formatNgayISO(date);
+}
+
+function khoiTaoTimPhong() {
+    const today = formatNgayISO(new Date());
+    const businessDate = typeof guestPms !== 'undefined' ? guestPms.load().extra.businessDate : today;
+    const start = businessDate > today ? businessDate : today;
+    const checkIn = document.getElementById('search-checkin');
+    const checkOut = document.getElementById('search-checkout');
+    checkIn.min = start;
+    checkIn.value = start;
+    checkOut.min = ngayKeTiep(start);
+    checkOut.value = ngayKeTiep(start);
+
+    checkIn.addEventListener('change', () => {
+        checkOut.min = ngayKeTiep(checkIn.value);
+        if (checkOut.value <= checkIn.value) checkOut.value = checkOut.min;
+        renderRooms();
+    });
+    ['search-checkout', 'search-rooms', 'search-adults', 'search-children'].forEach(id => {
+        document.getElementById(id).addEventListener('change', renderRooms);
+    });
+    document.getElementById('stay-search').addEventListener('submit', event => {
+        event.preventDefault();
+        renderRooms();
+        document.getElementById('room-list-container').scrollIntoView({ block: 'start' });
+    });
+    document.querySelector('.room-category-tabs').addEventListener('click', event => {
+        const button = event.target.closest('[data-room-category]');
+        if (!button) return;
+        boLocHangPhong = button.dataset.roomCategory;
+        document.querySelectorAll('[data-room-category]').forEach(tab => tab.setAttribute('aria-pressed', String(tab === button)));
+        renderRooms();
+    });
+    document.getElementById('room-list-container').addEventListener('click', event => {
+        const bookButton = event.target.closest('[data-book-room]');
+        const detailButton = event.target.closest('[data-room-detail]');
+        if (bookButton) chuanBiDatPhong(bookButton.dataset.bookRoom);
+        if (detailButton) openRoomModal(detailButton.dataset.roomDetail);
+    });
+}
+
+function layTieuChiTimPhong() {
+    const start = document.getElementById('search-checkin').value;
+    const end = document.getElementById('search-checkout').value;
+    const rooms = Number(document.getElementById('search-rooms').value);
+    const adults = Number(document.getElementById('search-adults').value);
+    const children = Number(document.getElementById('search-children').value);
+    const nights = tinhSoDem(start, end);
+    const minDate = document.getElementById('search-checkin').min;
+    const valid = Boolean(start && end && start >= minDate && nights > 0 && rooms >= 1 && rooms <= 5 && adults >= 1 && adults <= 6 && children >= 0 && children <= 5);
+    return { start, end, rooms, adults, children, nights, valid };
+}
+
 function renderRooms() {
     const container = document.getElementById('room-list-container');
     if (!container) return;
 
-    const roomTypes = docDuLieu('LoaiPhong');
+    const search = layTieuChiTimPhong();
+    const feedback = document.getElementById('search-feedback');
+    if (!search.valid) {
+        feedback.textContent = 'Vui lòng chọn ngày trả sau ngày nhận và nhập số phòng, số khách hợp lệ.';
+        container.replaceChildren();
+        return;
+    }
+    const roomTypes = docDuLieu('LoaiPhong').filter(roomType => {
+        const isSuite = roomType.MaLoaiPhong === 'LP_SUITE' || /suite/i.test(roomType.TenLoai || '');
+        return boLocHangPhong === 'all' || (boLocHangPhong === 'suite') === isSuite;
+    });
+    feedback.textContent = `${roomTypes.length} hạng phòng · ${search.nights} đêm · ${search.rooms} phòng · ${search.adults + search.children} khách/phòng`;
+    if (!roomTypes.length) {
+        container.innerHTML = '<p class="room-empty-message">Chưa có hạng phòng trong nhóm này. Vui lòng chọn nhóm khác.</p>';
+        return;
+    }
     container.innerHTML = roomTypes.map(roomType => {
-        const availableCount = demPhongSanSang(roomType.MaLoaiPhong);
-        const disabled = availableCount === 0;
+        const availableCount = demPhongTrongKhoangNgay(roomType.MaLoaiPhong, search.start, search.end);
+        const disabled = availableCount < search.rooms || search.adults + search.children > Number(roomType.SucChua || 2);
+        const amenities = Array.isArray(roomType.TienNghi) ? roomType.TienNghi.slice(0, 3) : [];
+        const maLoaiPhong = escapeHTML(roomType.MaLoaiPhong);
 
         return `
-        <div class="group cursor-pointer">
-            <div class="overflow-hidden relative shadow-sm">
-                <img onclick="openRoomModal('${roomType.MaLoaiPhong}')" src="${roomType.img}" alt="${roomType.TenLoai}" loading="lazy" class="w-full h-52 lg:h-64 object-cover transition duration-1000 group-hover:scale-105 cursor-pointer">
+        <article class="booking-room-card" data-room-id="${maLoaiPhong}">
+            <div class="booking-room-photo">
+                <img src="${escapeHTML(roomType.img || 'assets/hotel-hero.webp')}" alt="${escapeHTML(roomType.TenLoai)}" loading="lazy">
             </div>
-            <div class="pt-6 text-center">
-                <h4 class="text-2xl font-serif text-dark mb-2">${roomType.TenLoai}</h4>
-                <p class="text-sm font-serif text-gray-500 mb-2 italic">
-                    Giá: <span class="font-sans font-bold text-dark">${formatTien(roomType.GiaTieuChuan)}</span> / Đêm
-                </p>
-                <p class="text-xs text-gray-400 mb-4">Sức chứa ${roomType.SucChua || 2} khách · ${availableCount} phòng sẵn sàng</p>
-                <div class="mt-3 flex justify-center gap-4">
-                    <button onclick="chuanBiDatPhong('${roomType.MaLoaiPhong}')" ${disabled ? 'disabled' : ''} class="uppercase tracking-[0.2em] text-[10px] font-bold border-b pb-1 transition ${disabled ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-dark border-gold hover:text-gold'}">${disabled ? 'Tạm Hết Phòng' : 'Đặt Ngay'}</button>
+            <div class="booking-room-content">
+                <span class="eyebrow">${escapeHTML(roomType.DienTich || 'Phòng nghỉ')} · tối đa ${Number(roomType.SucChua || 2)} khách/phòng</span>
+                <h3>${escapeHTML(roomType.TenLoai)}</h3>
+                <p class="booking-room-description">${escapeHTML(roomType.MoTa || 'Không gian lưu trú tại SSA Hotel.')}</p>
+                <ul class="booking-room-amenities">${amenities.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul>
+                <button type="button" class="booking-details-link" data-room-detail="${maLoaiPhong}">Xem chi tiết phòng <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="booking-room-rate">
+                <span class="eyebrow">Giá tiêu chuẩn</span>
+                <strong>${formatTien(roomType.GiaTieuChuan)}</strong><small>/ phòng / đêm</small>
+                <p>${availableCount} phòng sẵn sàng trong ngày đã chọn</p>
+                <button type="button" data-book-room="${maLoaiPhong}" ${disabled ? 'disabled' : ''}>${disabled ? 'Không phù hợp / hết phòng' : 'Chọn hạng phòng'}</button>
+                <span class="rate-note">Thuế và ưu đãi được tính ở bước tiếp theo.</span>
                 </div>
-            </div>
-        </div>`;
+        </article>`;
     }).join('');
 }
 
@@ -521,9 +592,22 @@ function chuanBiDatPhong(maLoaiPhong) {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
+    const search = layTieuChiTimPhong();
+    const checkInDate = search.valid ? search.start : formatNgayISO(today);
+    const checkOutDate = search.valid ? search.end : formatNgayISO(tomorrow);
 
     document.getElementById('booking-room-id').value = maLoaiPhong;
     document.getElementById('booking-room-name').innerText = roomType.TenLoai;
+    const roomImage = document.getElementById('booking-room-image');
+    roomImage.src = roomType.img || 'assets/hotel-hero.webp';
+    roomImage.alt = roomType.TenLoai;
+    document.getElementById('booking-room-facts').textContent = `${roomType.DienTich || 'Phòng nghỉ'} · Tối đa ${roomType.SucChua || 2} khách/phòng`;
+    document.getElementById('booking-room-description').textContent = roomType.MoTa || '';
+    document.getElementById('booking-room-amenities').replaceChildren(...(Array.isArray(roomType.TienNghi) ? roomType.TienNghi.slice(0, 5) : []).map(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        return li;
+    }));
     document.getElementById('bk-name').value = user.HoTen;
     document.getElementById('bk-phone').value = user.SDT;
     document.getElementById('bk-email').value = user.Email;
@@ -531,8 +615,8 @@ function chuanBiDatPhong(maLoaiPhong) {
     const roomsInput = document.getElementById('bk-rooms');
     const roomsMaxField = document.getElementById('bk-rooms-max');
     if (roomsInput) {
-        const avail = demPhongTrongKhoangNgay(maLoaiPhong, formatNgayISO(today), formatNgayISO(tomorrow));
-        roomsInput.value = 1;
+        const avail = demPhongTrongKhoangNgay(maLoaiPhong, checkInDate, checkOutDate);
+        roomsInput.value = search.valid ? search.rooms : 1;
         roomsInput.max = Math.max(1, avail);
         if (roomsMaxField) roomsMaxField.value = avail;
     }
@@ -542,12 +626,12 @@ function chuanBiDatPhong(maLoaiPhong) {
     const guestsInput = document.getElementById('bk-guests');
 
     checkInInput.min = formatNgayISO(today);
-    checkOutInput.min = formatNgayISO(tomorrow);
-    checkInInput.value = formatNgayISO(today);
-    checkOutInput.value = formatNgayISO(tomorrow);
+    checkOutInput.min = ngayKeTiep(checkInDate);
+    checkInInput.value = checkInDate;
+    checkOutInput.value = checkOutDate;
 
     guestsInput.max = roomType.SucChua || 6;
-    guestsInput.value = Math.min(Number(guestsInput.value || 2), roomType.SucChua || 6);
+    guestsInput.value = Math.min(search.valid ? search.adults + search.children : 2, roomType.SucChua || 6);
 
     capNhatTomTatDatPhong();
     moModal('booking-modal');
@@ -779,11 +863,14 @@ function ganSuKienForm() {
 
 window.addEventListener('DOMContentLoaded', () => {
     initDB();
+    khoiTaoTimPhong();
     renderRooms();
+    renderHomeRooms();
     checkLoginStatus();
     taiDuLieuProfile();
     ganSuKienForm();
     hienThiTrangKhachHang();
 });
 
-window.addEventListener('hashchange', () => hienThiTrangKhachHang(true));
+window.addEventListener('scroll', hienThiTrangKhachHang, { passive: true });
+window.addEventListener('hashchange', () => requestAnimationFrame(hienThiTrangKhachHang));
