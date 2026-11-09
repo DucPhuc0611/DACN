@@ -143,7 +143,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('sidebar-menu').insertAdjacentHTML('beforeend','<button id="btn-operations" class="role-all w-full text-left p-3 rounded sidebar-btn text-white" onclick="chuyenTab(\'operations\')">Các nghiệp vụ khác</button>');
     document.getElementById('tab-customers').insertAdjacentHTML('afterend','<div id="tab-operations" class="hidden"></div>');
     document.body.insertAdjacentHTML('beforeend','<dialog id="pms-dialog" class="pms-modal"></dialog>');
-    document.querySelector('#login-screen ul').insertAdjacentHTML('beforeend',roles.map(([r,n])=>`<li>${n}: <b>${r}</b></li>`).join(''));
     document.querySelector('#login-screen>div').style.maxHeight='95vh';document.querySelector('#login-screen>div').style.overflowY='auto';
 });
 window.addEventListener('storage',e=>{if(currentStaff&&!document.getElementById('pms-dialog')?.open&&['Phong','PhieuDatPhong','SSA_Workflows_v1','SuCoKyThuat'].includes(e.key))refreshPms();});

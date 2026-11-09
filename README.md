@@ -10,7 +10,7 @@ Cần Node.js 20 trở lên. Không cần cài thư viện để chạy ứng d�
 npm start
 ```
 
-Mở `http://127.0.0.1:4173/`. Khách hàng: `User/index.html`. Nhân viên: `Admin/admin.html` → **Nghiệp vụ theo UC**.
+Mở `http://127.0.0.1:4173/`; đường gốc chuyển tới trang khách `User/`. Nhân viên mở trực tiếp trang PMS theo đường dẫn được người hướng dẫn cung cấp.
 
 Mở cả hai trang trên cùng địa chỉ máy chủ và cùng hồ sơ trình duyệt để dùng chung dữ liệu. Không mở bằng `file://` vì phạm vi lưu trữ giữa các trang có thể khác nhau.
 
@@ -18,13 +18,15 @@ Mở cả hai trang trên cùng địa chỉ máy chủ và cùng hồ sơ trìn
 
 Trang khách tại `User/index.html` có phần giới thiệu, bộ sưu tập hạng phòng và bộ lọc ngày/số phòng/số khách lấy từ dữ liệu `LoaiPhong`, `Phong` và `PhieuDatPhong`. Nút “Phòng & suite” cuộn đến danh sách hạng phòng trên cùng trang, nên khách vẫn có thể cuộn lên xem lại nội dung. Biểu mẫu đăng ký lưu trú hiển thị ảnh, mô tả và tiện nghi của hạng phòng đã chọn. PMS tại `Admin/admin.html` dùng cùng tông xanh trầm, kem và đồng, có thanh điều hướng cuộn ngang trên điện thoại. CSS giao diện nằm ở `User/luxury.css` và `Admin/luxury.css`; ảnh mở đầu có sẵn trong `User/assets/hotel-hero.webp`.
 
+Trang khách có thêm thẻ giới thiệu tiện nghi dựa trên dữ liệu hạng phòng và mục đánh giá 1–5 sao. Khách đăng nhập chỉ gửi được một đánh giá cho mỗi `PhieuDatPhong` có trạng thái `Đã trả phòng`; đánh giá và điểm trung bình lưu trong LocalStorage của trình duyệt đang dùng. Khi chưa có dữ liệu, trang hiển thị trạng thái trống thay vì tạo đánh giá giả.
+
 Bản đồ Google Maps đang trỏ đến **khu vực tham khảo trung tâm Quận 1**, vì địa chỉ khách sạn chưa được chốt. Phần sự kiện liên kết đến lịch TP.HCM trên Eventbrite và Ticketbox; không tự khẳng định khoảng cách hay sự kiện do SSA Hotel tổ chức. Số điện thoại `19077777` do người dùng cung cấp; `ssa.hotel.com` và Facebook/TikTok/Zalo được hiển thị là đang thiết lập/cập nhật, chưa có liên kết chính thức. Các phần này chỉ bổ sung cách trình bày và tra cứu, không biến mô phỏng thành dịch vụ khách sạn thực tế.
 
-## Tài khoản trình diễn
+## Vai trò trình diễn
 
-Mật khẩu các tài khoản mẫu: `123`. Tài khoản khách: `phuc`.
+Tài khoản và mật khẩu demo được quản lý trong mã nguồn hiện tại để phục vụ đồ án; không dùng cho môi trường thật. Việc ẩn đường dẫn `/index.html`, nút vào PMS và gợi ý tài khoản trên giao diện chỉ làm trang gọn hơn, **không bảo vệ dữ liệu**. Cần máy chủ xác thực, phân quyền và lưu mật khẩu an toàn trước khi triển khai thực tế.
 
-| Tài khoản nhân viên | Vai trò |
+| Tài khoản nhân viên demo | Vai trò |
 |---|---|
 | `admin` | Ban giám đốc, đầy đủ quyền |
 | `letan` | Đặt/nhận phòng, điều chỉnh lịch, thu cọc, trả phòng |

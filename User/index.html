@@ -99,6 +99,18 @@
                 <a class="text-link" href="#booking">Bắt đầu kỳ nghỉ <span aria-hidden="true">↗</span></a>
             </div>
         </section>
+        <section id="amenities" class="amenities-section section-shell" aria-labelledby="amenities-title">
+            <div class="amenities-heading">
+                <p class="eyebrow">Điểm nhấn lưu trú</p>
+                <h2 id="amenities-title">Một chút tiện nghi, <em>thêm nhiều cảm hứng</em></h2>
+                <p>Khám phá những lựa chọn đang được giới thiệu trong các hạng phòng của bản demo SSA Hotel.</p>
+            </div>
+            <div class="amenity-grid">
+                <article class="amenity-card amenity-card-sage"><span class="amenity-symbol" aria-hidden="true">✦</span><span class="eyebrow">Nghỉ ngơi</span><h3>Giường King êm ái</h3><p>Không gian King dành cho một đêm nghỉ thư thái hoặc chuyến công tác ngắn ngày.</p><a href="#booking">Khám phá phòng King <span aria-hidden="true">↗</span></a></article>
+                <article class="amenity-card amenity-card-rose"><span class="amenity-symbol" aria-hidden="true">◇</span><span class="eyebrow">Rộng rãi hơn</span><h3>Suite với phòng khách riêng</h3><p>Executive Suite mang đến khu vực tiếp khách tách biệt và không gian rộng cho gia đình.</p><a href="#booking">Khám phá suite <span aria-hidden="true">↗</span></a></article>
+                <article class="amenity-card amenity-card-gold"><span class="amenity-symbol" aria-hidden="true">✧</span><span class="eyebrow">Trong tầm tay</span><h3>Tiện ích theo hạng phòng</h3><p>Wi-Fi, bàn làm việc, minibar và các tiện nghi khác được trình bày rõ khi bạn chọn phòng.</p><a href="#booking">Xem tiện nghi từng phòng <span aria-hidden="true">↗</span></a></article>
+            </div>
+        </section>
     </div>
     <span id="booking" class="section-anchor" aria-hidden="true"></span>
     <main id="rooms-section" class="booking-page container mx-auto px-6 py-10 max-w-7xl">
@@ -126,6 +138,35 @@
         </div>
         <div id="room-list-container" class="booking-room-list"></div>
     </main>
+
+    <section id="reviews" class="reviews-section" aria-labelledby="reviews-title">
+        <div class="section-shell reviews-layout">
+            <div class="reviews-intro">
+                <p class="eyebrow">Cảm nhận sau kỳ nghỉ</p>
+                <h2 id="reviews-title">Khách lưu trú <em>đánh giá</em></h2>
+                <div class="reviews-summary"><span class="reviews-summary-stars" aria-hidden="true">☆☆☆☆☆</span><strong id="reviews-average">—</strong><span id="reviews-count">Chưa có đánh giá</span></div>
+                <p>Điểm sao được tính từ đánh giá của các lượt lưu trú đã trả phòng trong dữ liệu demo trên trình duyệt này.</p>
+                <a class="text-link" href="#booking">Tìm kỳ nghỉ của bạn <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="reviews-content">
+                <div id="reviews-list" class="reviews-list" aria-live="polite"></div>
+                <form id="review-form" class="review-form" hidden>
+                    <h3>Chia sẻ trải nghiệm của bạn</h3>
+                    <label for="review-booking">Lượt lưu trú đã hoàn tất</label>
+                    <select id="review-booking" required></select>
+                    <span class="review-label">Đánh giá của bạn</span>
+                    <div id="review-stars" class="review-stars" role="group" aria-label="Chọn từ 1 đến 5 sao">
+                        <button type="button" data-rating="1" aria-label="1 sao" aria-pressed="false">★</button><button type="button" data-rating="2" aria-label="2 sao" aria-pressed="false">★</button><button type="button" data-rating="3" aria-label="3 sao" aria-pressed="false">★</button><button type="button" data-rating="4" aria-label="4 sao" aria-pressed="false">★</button><button type="button" data-rating="5" aria-label="5 sao" aria-pressed="false">★</button>
+                    </div>
+                    <label for="review-comment">Cảm nhận của bạn</label>
+                    <textarea id="review-comment" rows="3" maxlength="600" placeholder="Điều gì khiến kỳ nghỉ của bạn đáng nhớ?"></textarea>
+                    <p id="review-feedback" role="status" aria-live="polite"></p>
+                    <button class="review-submit" type="submit">Gửi đánh giá <span aria-hidden="true">→</span></button>
+                </form>
+                <p id="review-invite" class="review-invite"></p>
+            </div>
+        </div>
+    </section>
 
     <section id="location" class="location-section" aria-labelledby="location-title">
         <div class="section-shell location-layout">
@@ -155,7 +196,7 @@
         <div class="bg-white p-10 shadow-2xl w-full max-w-md relative text-center">
             <button onclick="dongModal('login-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-dark text-3xl font-light">&times;</button>
             <h3 class="text-3xl font-serif text-dark mb-2">Đăng Nhập</h3>
-            <p class="text-xs text-gray-500 mb-8 font-light tracking-wide">Tài khoản demo: <b class="text-blue-600">phuc</b> | Pass: <b class="text-blue-600">123</b></p>
+            <p class="text-xs text-gray-500 mb-8 font-light tracking-wide">Đăng nhập để quản lý lượt lưu trú và chia sẻ đánh giá.</p>
             
             <form id="login-form" class="space-y-5" onsubmit="xuLyDangNhap(event)">
                 <input type="text" id="login-username" required class="w-full border-b border-gray-300 py-3 text-center font-serif text-lg outline-none focus:border-gold transition bg-transparent" placeholder="Tên đăng nhập...">
@@ -376,7 +417,7 @@
     <footer class="site-footer">
         <div class="section-shell footer-inner">
             <div class="footer-brand"><span class="footer-monogram" aria-hidden="true">S</span><strong>SSA HOTEL</strong><small>Security &amp; Supervision AI Hotel</small><p>Một không gian lưu trú được xây dựng cho trải nghiệm Sài Gòn thuận tiện và chu đáo.</p></div>
-            <div><p class="eyebrow">Khám phá</p><a href="#home">Trang chủ</a><a href="#booking">Phòng &amp; suite</a><a href="#location">Vị trí tham khảo</a><a href="#events">Sự kiện thành phố</a></div>
+            <div><p class="eyebrow">Khám phá</p><a href="#home">Trang chủ</a><a href="#booking">Phòng &amp; suite</a><a href="#amenities">Tiện nghi</a><a href="#reviews">Đánh giá</a><a href="#location">Vị trí tham khảo</a><a href="#events">Sự kiện thành phố</a></div>
             <div><p class="eyebrow">Liên hệ</p><a href="tel:19077777">19077777</a><span class="footer-text">ssa.hotel.com · đang thiết lập</span><span class="footer-text">Trung tâm Quận 1 · vị trí tham khảo</span></div>
             <div><p class="eyebrow">Kết nối</p><span class="footer-text">Facebook · đang cập nhật</span><span class="footer-text">TikTok · đang cập nhật</span><span class="footer-text">Zalo · đang cập nhật</span></div>
         </div>
@@ -387,5 +428,7 @@
     <script src="../shared/pms.js"></script>
     <script src="app.js"></script>
     <script src="workflows.js"></script>
+    <script src="reviews.js"></script>
+    <script>if (location.pathname.endsWith('/User/index.html')) history.replaceState(null, '', './' + location.search + location.hash);</script>
 </body>
 </html>

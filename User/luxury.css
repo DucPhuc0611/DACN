@@ -80,6 +80,55 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .experience-image { background-image: url('assets/hotel-hero.webp'); background-position: 79% 52%; background-size: cover; }
 .experience-copy { align-self: center; max-width: 620px; padding: 95px clamp(45px, 6vw, 120px); }
 
+.amenities-section { padding-block: 112px 122px; }
+.amenities-heading { max-width: 760px; margin-bottom: 42px; }
+.amenities-heading h2, .reviews-intro h2 { margin-top: 12px; color: var(--forest); font-size: clamp(38px, 4vw, 58px); font-weight: 400; line-height: 1.22; }
+.amenities-heading h2 em, .reviews-intro h2 em { font-weight: 400; }
+.amenities-heading > p:last-child { max-width: 600px; margin-top: 17px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.amenity-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.amenity-card { display: flex; flex-direction: column; min-height: 345px; padding: 32px; border: 1px solid #263c3310; transition: transform .2s, box-shadow .2s; }
+.amenity-card:hover { transform: translateY(-5px); box-shadow: 0 16px 36px #1d2f2717; }
+.amenity-card-sage { background: #e5ede5; }
+.amenity-card-rose { background: #f3e8e2; }
+.amenity-card-gold { background: #f4eacb; }
+.amenity-symbol { margin-bottom: 24px; color: var(--accent); font-family: Georgia, serif; font-size: 34px; line-height: 1; }
+.amenity-card h3 { margin-top: 11px; color: var(--forest); font-size: clamp(24px, 2.3vw, 31px); font-weight: 400; line-height: 1.3; }
+.amenity-card p { margin-top: 13px; color: #526056; font-size: 13px; line-height: 1.8; }
+.amenity-card a { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; border-top: 1px solid #263c3333; padding-top: 19px; color: var(--forest); font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.amenity-card a:hover { color: var(--accent); }
+
+.reviews-section { background: var(--cream); padding-block: 108px 120px; scroll-margin-top: 90px; }
+.reviews-layout { display: grid; grid-template-columns: minmax(260px, .75fr) minmax(420px, 1.25fr); gap: clamp(50px, 7vw, 110px); }
+.reviews-intro { align-self: start; }
+.reviews-intro > p:not(.eyebrow) { max-width: 430px; margin-top: 22px; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.reviews-intro .text-link { margin-top: 27px; }
+.reviews-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.reviews-summary-stars { color: #b48b44; font-size: 25px; letter-spacing: .11em; }
+.reviews-summary strong { color: var(--forest); font-family: 'Playfair Display', Georgia, serif; font-size: 34px; font-weight: 400; }
+.reviews-summary span:last-child { color: var(--muted); font-size: 12px; }
+.reviews-list { display: grid; gap: 15px; }
+.review-card, .reviews-empty { border: 1px solid var(--line); background: #fffefa; padding: 27px 30px; }
+.review-card-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.review-card-stars { color: #ae8540; font-size: 20px; letter-spacing: .11em; }
+.review-card time { color: var(--muted); font-size: 11px; }
+.review-card p { margin-top: 13px; color: var(--ink); font-size: 14px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.review-card small { display: block; margin-top: 14px; color: var(--muted); font-size: 11px; }
+.reviews-empty { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.review-form { display: grid; gap: 11px; margin-top: 20px; border: 1px solid var(--line); background: #fffefa; padding: 28px 30px; }
+.review-form[hidden] { display: none; }
+.review-form h3 { margin-bottom: 5px; color: var(--forest); font-size: 25px; font-weight: 400; }
+.review-form label, .review-label { color: var(--forest); font-size: 11px; font-weight: 700; letter-spacing: .07em; }
+.review-form select, .review-form textarea { width: 100%; border: 1px solid var(--line); background: white; padding: 12px; color: var(--ink); font-size: 13px; }
+.review-form textarea { resize: vertical; }
+.review-stars { display: flex; gap: 7px; margin-bottom: 8px; }
+.review-stars button { color: #c8c9c4; font-size: 31px; line-height: 1.2; transition: color .15s, transform .15s; }
+.review-stars button:hover, .review-stars button.is-active { color: #b48b44; transform: scale(1.06); }
+#review-feedback, .review-invite { color: var(--muted); font-size: 12px; line-height: 1.6; }
+#review-feedback:empty, .review-invite:empty { display: none; }
+.review-submit { display: flex; justify-content: space-between; gap: 18px; margin-top: 4px; background: var(--forest); padding: 14px 18px; color: white; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.review-submit:hover { background: var(--accent); }
+.review-invite { margin-top: 18px; }
+
 .section-anchor { display: block; height: 0; scroll-margin-top: 88px; }
 #location, #events { scroll-margin-top: 88px; }
 .booking-page { padding-block: 110px 125px; }
@@ -191,6 +240,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .booking-room-rate button { width: auto; min-width: 155px; margin-left: auto; }
     .rate-note { display: none; }
     .footer-inner { gap: 30px; }
+    .reviews-layout { gap: 45px; }
 }
 @media (max-width: 760px) {
     .section-shell { width: min(100% - 36px, 1280px); }
@@ -221,6 +271,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .experience-section { grid-template-columns: 1fr; }
     .experience-image { min-height: 360px; }
     .experience-copy { padding: 65px 28px 75px; }
+    .amenities-section { padding-block: 75px 85px; }
+    .amenity-grid, .reviews-layout { grid-template-columns: 1fr; }
+    .amenity-card { min-height: 280px; }
+    .reviews-section { padding-block: 75px 85px; scroll-margin-top: 118px; }
     .section-anchor { scroll-margin-top: 118px; }
     #location, #events { scroll-margin-top: 118px; }
     .booking-page { padding-block: 80px 90px; }

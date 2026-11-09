@@ -425,6 +425,7 @@ function checkLoginStatus() {
         userMenu?.classList.add('hidden');
         if (displayName) displayName.innerText = '';
     }
+    window.dispatchEvent(new Event('ssa-auth-change'));
 }
 
 function xuLyDangNhap(e) {
