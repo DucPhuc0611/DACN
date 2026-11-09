@@ -3,7 +3,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 (async()=>{
-    const browser=await chromium.launch({channel:'msedge',headless:true});
+    const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHANNEL?{channel:process.env.PLAYWRIGHT_CHANNEL}:{})});
     try{
         const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];
         page.on('pageerror',e=>errors.push(e.message));
@@ -34,7 +34,13 @@ const fs=require('node:fs');
         await tab('audit');await page.screenshot({path:'test-results/pms-audit.png',fullPage:true});
         const guest=await context.newPage();guest.on('pageerror',e=>errors.push(e.message));guest.on('dialog',d=>d.accept());
         await guest.goto('http://127.0.0.1:4173/User/index.html',{waitUntil:'networkidle'});
-        await guest.locator('[onclick="moModal(\'login-modal\')"]').click();await guest.locator('#login-username').fill('phuc');await guest.locator('#login-password').fill('123');await guest.locator('#login-form button[type=submit]').click();
+        assert.equal(await guest.locator('.home-room-card').count(),3);
+        await guest.locator('.home-room-card .text-link').first().click();
+        assert.match(guest.url(),/#booking$/);
+        await guest.locator('#login-modal:not(.hidden)').waitFor();
+        await guest.locator('#login-username').fill('phuc');await guest.locator('#login-password').fill('123');await guest.locator('#login-form button[type=submit]').click();
+        await guest.locator('#booking-modal:not(.hidden)').waitFor();
+        await guest.locator('#booking-modal button[onclick="dongModal(\'booking-modal\')"]').click();
         await guest.locator('[onclick="moModal(\'profile-modal\')"]').click();
         assert.match(await guest.locator('#history-list').innerText(),/Đã trả phòng/);assert.match(await guest.locator('#history-list').innerText(),/Ăn sáng/);
         await guest.screenshot({path:'test-results/guest-history.png',fullPage:true});

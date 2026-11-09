@@ -14,6 +14,10 @@ Mở `http://127.0.0.1:4173/`. Khách hàng: `User/index.html`. Nhân viên: `Ad
 
 Mở cả hai trang trên cùng địa chỉ máy chủ và cùng hồ sơ trình duyệt để dùng chung dữ liệu. Không mở bằng `file://` vì phạm vi lưu trữ giữa các trang có thể khác nhau.
 
+## Giao diện
+
+Trang khách tại `User/index.html` có phần giới thiệu, bộ sưu tập hạng phòng lấy từ `LoaiPhong` và nút đi thẳng vào luồng đặt phòng. PMS tại `Admin/admin.html` dùng cùng tông xanh trầm, kem và đồng, có thanh điều hướng cuộn ngang trên điện thoại. CSS giao diện nằm ở `User/luxury.css` và `Admin/luxury.css`; ảnh mở đầu có sẵn trong `User/assets/hotel-hero.webp`. Phần giao diện này chỉ thay cách trình bày, không biến các khả năng mô phỏng thành dịch vụ khách sạn thực tế.
+
 ## Tài khoản trình diễn
 
 Mật khẩu các tài khoản mẫu: `123`. Tài khoản khách: `phuc`.

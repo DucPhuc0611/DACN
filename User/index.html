@@ -17,50 +17,90 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="luxury.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased overflow-x-hidden">
-    <nav aria-label="Điều hướng chính" class="sticky w-full z-40 top-0 bg-dark">
-        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4 text-white">
-            <a href="#home" aria-label="SSA Hotel - Trang chủ" class="text-2xl font-serif tracking-[0.2em] text-gold font-medium">SSA HOTEL</a>
-            <div class="flex items-center gap-4 text-xs tracking-widest uppercase">
-                <a id="nav-home" href="#home" class="hover:text-gold transition">Trang chủ</a>
-                <a id="nav-booking" href="#booking" class="border border-gold px-4 py-3 hover:bg-gold hover:text-white transition">Đặt phòng</a>
+    <nav aria-label="Điều hướng chính" class="site-nav sticky w-full z-40 top-0">
+        <div class="site-nav-inner container mx-auto px-4 flex flex-wrap justify-between items-center gap-4">
+            <a href="#home" aria-label="SSA Hotel - Trang chủ" class="brand-lockup">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span><strong>SSA HOTEL</strong><small>SAIGON · VIETNAM</small></span>
+            </a>
+            <div class="primary-links flex items-center gap-4 text-xs tracking-widest uppercase">
+                <a id="nav-home" href="#home" class="transition">Khám phá</a>
+                <a id="nav-booking" href="#booking" class="transition">Phòng &amp; suite</a>
             </div>
-            <div class="text-[11px] tracking-[0.2em] uppercase font-bold flex gap-6 items-center">
+            <div class="account-links text-[11px] tracking-[0.2em] uppercase flex gap-6 items-center">
                 <div id="menu-guest" class="flex items-center gap-3">
-                    <button onclick="moModal('register-modal')" class="bg-gold border border-gold px-5 py-2 text-white hover:bg-white hover:text-dark hover:border-white transition duration-300">
-                        Đăng Ký
+                    <button onclick="moModal('register-modal')" class="account-register transition duration-300">
+                        Tạo tài khoản
                     </button>
-                    <button onclick="moModal('login-modal')" class="bg-transparent border border-white px-5 py-2 hover:bg-white hover:text-dark transition duration-300">
+                    <button onclick="moModal('login-modal')" class="account-login transition duration-300">
                         Đăng Nhập
                     </button>
                 </div>
                 <div id="menu-user" class="hidden flex items-center gap-5">
-                    <button onclick="moModal('profile-modal')" class="hover:text-gold transition border-b border-transparent hover:border-gold pb-1">
-                        Hồ Sơ Của <span id="display-name" class="text-gold"></span>
+                    <button onclick="moModal('profile-modal')" class="account-profile transition">
+                        Hồ sơ <span id="display-name"></span>
                     </button>
-                    <button onclick="xuLyDangXuat()" class="text-red-400 hover:text-red-500 transition">Đăng Xuất</button>
+                    <button onclick="xuLyDangXuat()" class="account-logout transition">Đăng Xuất</button>
                 </div>
             </div>
         </div>
     </nav>
-    <header id="home-section" class="relative min-h-[75vh] py-16 bg-dark bg-cover bg-center flex items-center justify-center" style="background-image: url('assets/hotel-hero.webp');">
-        <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/50"></div>
-        <div class="relative z-10 text-center text-white px-4 mt-20">
-            <p class="uppercase tracking-[0.3em] text-xs mb-6 text-gold drop-shadow-md font-semibold">Chào Mừng Đến Với</p>
-            <h1 id="home-title" tabindex="-1" class="text-5xl md:text-7xl font-serif mb-6 leading-tight drop-shadow-2xl">
-                Tuyệt Tác Không Gian<br>Giữa Lòng Sài Gòn
+    <header id="home-section" class="hotel-hero relative bg-dark bg-cover bg-center" style="background-image: url('assets/hotel-hero.webp');">
+        <div aria-hidden="true" class="hero-shade absolute inset-0"></div>
+        <div class="hero-content relative z-10 text-white">
+            <p class="eyebrow hero-eyebrow">SSA Hotel · Sài Gòn</p>
+            <h1 id="home-title" tabindex="-1" class="font-serif leading-tight">
+                Một khoảng lặng<br><em>giữa lòng phố thị</em>
             </h1>
-            <p class="max-w-2xl mx-auto font-light text-sm md:text-base opacity-90 leading-relaxed">
-                Trải nghiệm kỳ nghỉ xa hoa và dịch vụ cá nhân hóa đẳng cấp quốc tế tại SSA Hotel.
+            <p class="hero-description">
+                Không gian lưu trú tinh tế, nơi mỗi hành trình ở Sài Gòn được đón tiếp bằng sự chu đáo.
             </p>
-            <a href="#booking" class="inline-block mt-8 bg-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-white hover:text-dark hover:border-white transition">Đặt phòng ngay</a>
+            <a href="#booking" class="hero-link">Khám phá hạng phòng <span aria-hidden="true">↗</span></a>
         </div>
+        <div class="hero-side-note" aria-hidden="true">SECURITY &amp; SUPERVISION AI HOTEL</div>
     </header>
-    <main id="rooms-section" class="hidden container mx-auto px-6 py-10 max-w-7xl min-h-[75vh]">
+    <div id="home-content">
+        <div class="reservation-ribbon">
+            <div><span class="eyebrow">Lưu trú tại SSA Hotel</span><strong>Một kỳ nghỉ dành riêng cho bạn</strong></div>
+            <p>Khám phá phòng phù hợp, chọn ngày lưu trú và hoàn tất yêu cầu đặt phòng trực tuyến.</p>
+            <a href="#booking">Xem phòng <span aria-hidden="true">→</span></a>
+        </div>
+        <section class="intro-section section-shell" aria-labelledby="intro-title">
+            <div class="intro-image" role="img" aria-label="Không gian bên hồ bơi của SSA Hotel"></div>
+            <div class="intro-copy">
+                <p class="eyebrow">Chào mừng đến với SSA Hotel</p>
+                <h2 id="intro-title">Nét riêng trong từng <em>khoảnh khắc</em></h2>
+                <span class="fine-rule" aria-hidden="true"></span>
+                <p>Giữa nhịp sống sôi động của Sài Gòn, SSA Hotel mang đến một nơi nghỉ ngơi yên tĩnh với phòng ở được chăm chút và trải nghiệm lưu trú liền mạch.</p>
+                <a class="text-link" href="#booking">Khám phá không gian lưu trú <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+        <section class="collection-section" aria-labelledby="collection-title">
+            <div class="section-shell">
+                <div class="collection-heading">
+                    <div><p class="eyebrow">Nghỉ ngơi theo cách của bạn</p><h2 id="collection-title">Phòng &amp; suite</h2></div>
+                    <a class="text-link" href="#booking">Xem tất cả hạng phòng <span aria-hidden="true">↗</span></a>
+                </div>
+                <div id="home-room-list" class="home-room-grid"></div>
+            </div>
+        </section>
+        <section class="experience-section" aria-labelledby="experience-title">
+            <div class="experience-image" role="img" aria-label="Không gian khách sạn vào buổi tối"></div>
+            <div class="experience-copy">
+                <p class="eyebrow">Trải nghiệm lưu trú</p>
+                <h2 id="experience-title">Sự chăm sóc nằm trong <em>từng chi tiết</em></h2>
+                <p>Từ lúc đặt phòng đến khi trả phòng, mọi thông tin lưu trú được sắp xếp rõ ràng để bạn tận hưởng thời gian của mình một cách trọn vẹn.</p>
+                <a class="text-link" href="#booking">Bắt đầu kỳ nghỉ <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+    </div>
+    <main id="rooms-section" class="booking-page hidden container mx-auto px-6 py-10 max-w-7xl min-h-[75vh]">
         <a href="#home" class="inline-block mb-6 text-sm text-gray-500 hover:text-gold">&larr; Về trang chủ</a>
         <div class="text-center mb-8">
-            <p class="text-xs uppercase tracking-widest text-gold font-bold mb-3">Đặt phòng tại SSA Hotel</p>
+            <p class="eyebrow mb-3">Đặt phòng tại SSA Hotel</p>
             <h2 id="booking-title" tabindex="-1" class="text-4xl font-serif text-dark font-medium mb-4">Chọn hạng phòng của bạn</h2>
             <p class="text-gray-500 font-light text-sm tracking-wide">Chọn hạng phòng yêu thích, sau đó chọn ngày lưu trú và xác nhận đặt phòng.</p>
         </div>
@@ -279,9 +319,13 @@
         </div>
     </div>
 
-    <footer class="bg-dark text-white py-12 text-center text-xs tracking-widest font-light">
-        <p class="mb-2 uppercase font-bold text-gold">SSA HOTEL MANAGEMENT</p>
-        <p class="opacity-50">© 2026 Đồ Án Cơ Sở - Khoa CNTT. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="section-shell footer-inner">
+            <div><span class="footer-monogram" aria-hidden="true">S</span><strong>SSA HOTEL</strong><small>Security &amp; Supervision AI Hotel</small></div>
+            <div><p class="eyebrow">Khám phá</p><a href="#home">Trang chủ</a><a href="#booking">Phòng &amp; suite</a></div>
+            <div><p class="eyebrow">Tài khoản</p><button onclick="moModal('login-modal')">Đăng nhập</button><button onclick="moModal('register-modal')">Đăng ký</button></div>
+        </div>
+        <p class="footer-bottom">© 2026 SSA Hotel · Dự án học tập HUTECH</p>
     </footer>
 
     <link rel="stylesheet" href="../Admin/workflows.css">

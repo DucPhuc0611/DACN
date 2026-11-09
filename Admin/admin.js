@@ -258,7 +258,7 @@ function chuyenTab(tabName) {
     capNhatHeaderActions(tabName);
 
     const titles = {
-        dashboard: 'Dashboard Quản Trị',
+        dashboard: 'Tổng quan',
         rooms: 'Sơ Đồ Trạng Thái Phòng',
         bookings: 'Hồ Sơ Lưu Trú',
         technical: 'Quản Lý Kỹ Thuật',

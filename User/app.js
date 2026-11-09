@@ -222,6 +222,7 @@ let loaiPhongChoDangNhap = null;
 function hienThiTrangKhachHang(chuyenFocus = false) {
     const dangDatPhong = ['#booking', '#rooms-section'].includes(window.location.hash);
     document.getElementById('home-section').classList.toggle('hidden', dangDatPhong);
+    document.getElementById('home-content').classList.toggle('hidden', dangDatPhong);
     document.getElementById('rooms-section').classList.toggle('hidden', !dangDatPhong);
     ['nav-home', 'nav-booking'].forEach(id => {
         const active = (id === 'nav-booking') === dangDatPhong;
@@ -231,10 +232,51 @@ function hienThiTrangKhachHang(chuyenFocus = false) {
         else link.removeAttribute('aria-current');
     });
     if (dangDatPhong) renderRooms();
+    else renderHomeRooms();
     if (chuyenFocus) {
         document.getElementById(dangDatPhong ? 'booking-title' : 'home-title').focus({ preventScroll: true });
         window.scrollTo(0, 0);
     }
+}
+
+function renderHomeRooms() {
+    const container = document.getElementById('home-room-list');
+    if (!container) return;
+    container.replaceChildren();
+
+    docDuLieu('LoaiPhong').slice(0, 3).forEach((roomType, index) => {
+        const card = document.createElement('article');
+        card.className = 'home-room-card';
+
+        const image = document.createElement('img');
+        image.src = roomType.img || 'assets/hotel-hero.webp';
+        image.alt = roomType.TenLoai || 'Hạng phòng SSA Hotel';
+        image.loading = 'lazy';
+        card.append(image);
+
+        const copy = document.createElement('div');
+        copy.className = 'home-room-copy';
+        const label = document.createElement('span');
+        label.className = 'eyebrow';
+        label.textContent = `Không gian 0${index + 1}`;
+        const title = document.createElement('h3');
+        title.textContent = roomType.TenLoai;
+        const detail = document.createElement('p');
+        detail.textContent = `${roomType.DienTich || 'Phòng nghỉ'} · Tối đa ${roomType.SucChua || 2} khách`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'text-link';
+        const available = demPhongSanSang(roomType.MaLoaiPhong) > 0;
+        button.disabled = !available;
+        button.textContent = available ? 'Xem & đặt phòng ↗' : 'Tạm hết phòng';
+        button.addEventListener('click', () => {
+            window.location.hash = 'booking';
+            chuanBiDatPhong(roomType.MaLoaiPhong);
+        });
+        copy.append(label, title, detail, button);
+        card.append(copy);
+        container.append(card);
+    });
 }
 
 function tiepTucDatPhongSauDangNhap() {

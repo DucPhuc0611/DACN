@@ -46,7 +46,7 @@
     <div id="login-screen" class="fixed inset-0 bg-dark flex justify-center items-center z-50">
         <div class="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md text-center">
             <h1 class="text-3xl font-serif text-dark mb-2 text-gold">SSA HOTEL</h1>
-            <p class="text-xs uppercase tracking-widest text-gray-400 mb-6 border-b pb-4">Hệ Thống Quản Trị PMS</p>
+            <p class="text-xs uppercase tracking-widest text-gray-400 mb-6 border-b pb-4">Không gian quản trị · PMS</p>
             
             <div class="text-left bg-gray-50 p-4 rounded mb-6 text-xs text-gray-600 shadow-inner">
                 <p class="font-bold mb-1 text-blue-600">Tài khoản Nội bộ (Pass chung: 123)</p>
@@ -70,12 +70,12 @@
     <aside class="pms-sidebar w-64 bg-panel text-gray-300 flex flex-col z-20">
         <div class="sidebar-identity">
             <span class="sidebar-monogram" aria-hidden="true">S</span>
-            <div><h2>SSA Hotel</h2><p>Hotel management</p></div>
+            <div><h2>SSA Hotel</h2><p>Security &amp; Supervision</p></div>
         </div>
         
         <nav aria-label="Điều hướng quản trị" class="flex-1 p-4 space-y-2 overflow-y-auto text-sm font-medium" id="sidebar-menu">
             <p class="sidebar-section">Vận hành</p>
-            <button onclick="chuyenTab('dashboard')" class="role-all w-full text-left p-3 hover:bg-opacity-95 rounded transition sidebar-btn text-white" id="btn-dashboard">Dashboard</button>
+            <button onclick="chuyenTab('dashboard')" class="role-all w-full text-left p-3 hover:bg-opacity-95 rounded transition sidebar-btn text-white" id="btn-dashboard">Tổng quan</button>
             <button onclick="chuyenTab('rooms')" class="role-all w-full text-left p-3 hover:bg-opacity-95 rounded transition sidebar-btn text-white" id="btn-rooms">Sơ Đồ Phòng</button>
             <button onclick="chuyenTab('bookings')" class="role-letan role-admin w-full text-left p-3 hover:bg-opacity-95 rounded transition sidebar-btn hidden text-white" id="btn-bookings">Quản Lý Lưu Trú</button>
             <button onclick="chuyenTab('technical')" class="role-letan role-kythuat role-admin w-full text-left p-3 hover:bg-opacity-95 rounded transition sidebar-btn hidden text-white" id="btn-technical">Kỹ Thuật</button>
@@ -95,7 +95,7 @@
         <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center z-10">
             <div class="flex items-center gap-4">
                 <span class="shell-breadcrumb">Quản lý khách sạn <span aria-hidden="true">/</span></span>
-                <h2 id="page-title" class="text-lg font-medium text-gray-700">Dashboard</h2>
+                <h2 id="page-title" class="text-lg font-medium text-gray-700">Tổng quan</h2>
             </div>
             <div id="header-actions" class="flex gap-3 items-center">
                 <div class="px-3 py-1 rounded border border-gray-200 text-sm text-gray-600">Sẵn sàng: <strong id="stat-ready-mini" class="text-green-600 ml-1">0</strong></div>
@@ -106,6 +106,10 @@
 
         <div class="p-8 flex-1 overflow-y-auto">
             <div id="tab-dashboard" class="space-y-6">
+                <div class="dashboard-intro">
+                    <div><p class="dashboard-eyebrow">SSA HOTEL · VẬN HÀNH</p><h1>Tổng quan khách sạn</h1><p>Theo dõi phòng, lưu trú và công việc trong một không gian thống nhất.</p></div>
+                    <span class="dashboard-decoration" aria-hidden="true">S</span>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4">
                     <div class="bg-white border border-gray-200 shadow-sm rounded p-4">
                         <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">Tổng phòng</p>
@@ -258,6 +262,7 @@
 
     <link rel="stylesheet" href="workflows.css">
     <link rel="stylesheet" href="rooms.css?v=20261101-rooms">
+    <link rel="stylesheet" href="luxury.css">
     <script src="../shared/pms.js"></script>
     <script src="admin.js?v=20261101-rooms"></script>
     <script src="workflows.js?v=20261101-label"></script>
