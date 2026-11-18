@@ -3,3 +3,7 @@
 /uc_vp_work/
 /test-results/
 /node_modules/
+*_backup_*.docx
+database/*.db-wal
+database/*.db-shm
+database/live_data_sqlserver.sql

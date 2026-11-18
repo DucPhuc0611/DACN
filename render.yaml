@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ssa-hotel-pms
+    runtime: docker
+    plan: free
+    envVars:
+      - key: PORT
+        value: 4173
+      - key: HOST
+        value: 0.0.0.0

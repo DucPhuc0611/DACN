@@ -123,3 +123,31 @@ test('reductions cannot make pre-tax subtotal negative',()=>{
 test('common-area incidents preserve existing technical form fields',()=>{
     const {p,front}=fixture();p.reportIncident(front,{area:'Nhà hàng',category:'Điện',priority:'Cao',note:'Đèn hỏng'});const i=p.load().incidents[0];assert.equal(i.MaPhong,'');assert.equal(i.KhuVuc,'Nhà hàng');assert.equal(i.NhomSuCo,'Điện');assert.equal(i.TenNVBao,front.HoTen);
 });
+test('sqlite database syncs all 10 relational tables from Chapter 3',()=>{
+    process.env.NODE_ENV='test';
+    const db=require('../database/db.cjs');
+    db.resetToSeed();
+    const {p,storage,front,house,service,audit,reserve,checkin}=fixture();
+    const bid=reserve({end:'2026-11-02',deposit:30});
+    checkin(bid);
+    p.residence(front,bid,'TAMTRU-01');
+    p.service(service,bid,{item:'BREAKFAST',quantity:2,confirmed:true,customer:'Khách A'});
+    p.service(house,bid,{item:'WATER',quantity:1,confirmed:true,customer:'Khách A'});
+    p.reportIncident(front,{room:'102',note:'Hỏng đèn'});
+    p.nightAudit(audit);
+    p.roomCheck(house,bid,'Phòng tốt');
+    p.checkout(front,bid,{amount:102,method:'Thẻ',ref:'AUTH-99',confirmed:true});
+    const dump={};
+    for(const k of ['KhachHang','LoaiPhong','Phong','PhieuDatPhong','SuCoKyThuat','SSA_Workflows_v1']){
+        dump[k]=storage.getItem(k);
+    }
+    db.updateStorage(dump);
+    const summary=db.getRelationalSummary().tables;
+    assert.equal(summary.PhieuDatPhong.length,1);
+    assert.equal(summary.PhieuDichVu.length,1);
+    assert.equal(summary.PhieuTieuHao.length,1);
+    assert.equal(summary.PhieuBaoTri.length,1);
+    assert.equal(summary.HoaDonTong.length,1);
+    assert.equal(summary.BaoCaoKiemToan.length,1);
+    db.resetToSeed();
+});
