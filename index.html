@@ -3,47 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSA Hotel | Cổng truy cập</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
-                    colors: { gold: '#C5A059', dark: '#111111' }
-                }
-            }
-        }
-    </script>
+    <meta http-equiv="refresh" content="0; url=User/">
+    <title>SSA Hotel</title>
+    <script>window.location.replace(new URL('User/' + window.location.search + window.location.hash, window.location.href));</script>
 </head>
-<body class="min-h-screen bg-dark text-white font-sans">
-    <main class="relative min-h-screen flex items-center">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1542314831-c6a4d1424391?auto=format&fit=crop&w=2000&q=80');"></div>
-        <div class="absolute inset-0 bg-black/70"></div>
-
-        <section class="relative z-10 w-full px-6 py-16">
-            <div class="mx-auto max-w-5xl">
-                <p class="text-xs uppercase tracking-[0.35em] text-gold font-bold mb-5">Đồ án quản lý khách sạn</p>
-                <h1 class="font-serif text-5xl md:text-7xl leading-tight mb-6">SSA Hotel</h1>
-                <p class="max-w-2xl text-white/80 leading-relaxed mb-10">
-                    Cổng truy cập nhanh cho website khách hàng và hệ thống quản trị. Dữ liệu demo được lưu trên trình duyệt để phục vụ trình bày đồ án nhanh.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
-                    <a href="User/index.html" class="group border border-white/30 bg-white text-dark p-6 hover:bg-gold hover:text-white hover:border-gold transition">
-                        <p class="text-xs uppercase tracking-[0.25em] font-black mb-3">Khách hàng</p>
-                        <h2 class="font-serif text-3xl mb-3">Website đặt phòng</h2>
-                        <p class="text-sm opacity-70 leading-relaxed">Đăng ký, đăng nhập, xem hạng phòng và gửi phiếu đặt phòng khách sạn.</p>
-                    </a>
-                    <a href="Admin/admin.html?v=20260608-session-tab" class="group border border-white/30 bg-black/40 p-6 hover:bg-white hover:text-dark transition">
-                        <p class="text-xs uppercase tracking-[0.25em] font-black text-gold mb-3">Quản trị</p>
-                        <h2 class="font-serif text-3xl mb-3">Admin PMS</h2>
-                        <p class="text-sm opacity-70 leading-relaxed">Dashboard, sơ đồ phòng, quản lý lưu trú, kỹ thuật, buồng phòng và khách hàng.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+<body>
+    <p>Đang mở SSA Hotel… <a href="User/">Vào trang khách sạn</a></p>
 </body>
 </html>

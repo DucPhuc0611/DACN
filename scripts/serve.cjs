@@ -55,7 +55,6 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // REST API for SQLite Database synchronization & relational table inspection
     if (url === '/api/version' && req.method === 'GET') {
         sendJson(res, 200, { version: db.getVersion() });
         return;
@@ -102,5 +101,5 @@ const server = http.createServer(async (req, res) => {
 const port = Number(process.env.PORT || 4173);
 const host = process.env.HOST || '0.0.0.0';
 server.listen(port, host, () => {
-    console.log(`SSA Hotel PMS (SQLite DB): http://127.0.0.1:${server.address().port}`);
+    console.log(`SSA Hotel: http://127.0.0.1:${server.address().port}`);
 });
