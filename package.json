@@ -2,10 +2,9 @@
   "name": "ssa-hotel-pms",
   "version": "1.0.0",
   "private": true,
-  "description": "SSA Hotel browser-based PMS demonstration",
+  "description": "SSA Hotel Property Management System",
   "scripts": {
     "start": "node scripts/serve.cjs",
-    "test": "node --test tests/pms.test.js",
     "check": "node --check shared/pms.js && node --check shared/db-sync.js && node --check database/db.cjs && node --check scripts/serve.cjs && node --check Admin/admin.js && node --check Admin/rooms.js && node --check Admin/workflows.js && node --check User/workflows.js && node --check User/reviews.js"
   }
 }

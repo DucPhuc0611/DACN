@@ -3,7 +3,8 @@
 /uc_vp_work/
 /test-results/
 /node_modules/
-*_backup_*.docx
+*.docx
+TaiKhoan_PMS.txt
 database/*.db-wal
 database/*.db-shm
 database/live_data_sqlserver.sql
